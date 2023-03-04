@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}
+    Articles List
+{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Body</th>
+            <th colspan="2"></th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in articles %}
+            <tr>
+                <td><a href="{% url 'article_detail' article.id %}">{{ article.id }}</a></td>
+                <td>{{ article.title }}</td>
+                <td>{{ article.body }}</td>
+
+                {% if article.author == request.user %}
+
+                    <td><a href="{% url 'article_update' article.id %}">✏️</a></td>
+                    <td><a href="{% url 'article_delete' article.id %}">🗑️</a></td>
+
+                {% endif %}
+
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}

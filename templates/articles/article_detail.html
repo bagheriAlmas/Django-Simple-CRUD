@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}
+    {{ article }}
+{% endblock %}
+
+{% block content %}
+    <div style=" margin: 30px">
+        <table>
+            <tr>
+                <th>ID</th>
+                <td>{{ article.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ article.title }}</td>
+            </tr>
+            <tr>
+                <th>Body</th>
+                <td>{{ article.body }}</td>
+            </tr>
+
+            <tr>
+                <th>Author</th>
+                <td>{{ article.author }}</td>
+            </tr>
+
+            <tr>
+                <th>Date</th>
+                <td>{{ article.date }}</td>
+            </tr>
+        </table>
+
+        {% if article.author == request.user %}
+            <div style="margin-top: 20px">
+                <a class="btn btn-warning"
+                   href="{% url 'article_update' article.id %}">Update</a>
+                <a class="btn btn-danger"
+                   href="{% url 'article_delete' article.id %}">Delete</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <hr>
+    {% if user.is_authenticated %}
+        <form action="" method="POST"
+              style="width: 20% ; margin: 20px">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary"
+                    style="margin-top: 20px">Send
+            </button>
+        </form>
+    {% else %}
+        <p class="text-warning-emphasis">You Must login to Send Comment</p>
+    {% endif %}
+    <hr>
+
+    <h3>Comments :</h3>
+    {% for comment in article.comments.all %}
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ comment.author }}</h5>
+                <p class="card-text">{{ comment.comment }}
+                    {% if comment.author == request.user %}
+                        <a href="#" class="card-link">✏️</a>
+                        <a href="#" class="card-link">🗑️</a>
+                        </p>
+                    {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
