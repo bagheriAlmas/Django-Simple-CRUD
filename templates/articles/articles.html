@@ -1,39 +1,41 @@
 {% extends 'base.html' %}
+{% load bootstrap_icons %}
+
 {% block title %}
     Articles List
 {% endblock %}
 
 {% block content %}
-    <table>
+
+    <table class="table table-hover">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Body</th>
-            {% if user.is_authenticated %}
-                <th colspan="2"></th>
-            {% endif %}
-
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
 
         </tr>
         </thead>
         <tbody>
         {% for article in articles %}
-            <tr>
-                <td><a href="{% url 'article_detail' article.id %}">{{ article.id }}</a></td>
+            <tr onclick='window.location="{% url 'article_detail' article.id %}"'>
+                <th scope="row">{{ article.id }}</th>
                 <td>{{ article.title }}</td>
-                <td>{{ article.body }}</td>
-
-                {% if article.author == request.user %}
-
-                    <td><a href="{% url 'article_update' article.id %}">✏️</a></td>
-                    <td><a href="{% url 'article_delete' article.id %}">🗑️</a></td>
-
-                {% endif %}
-
+                <td>
+                    <div class="d-flex">
+                        <div style="flex: 80%">{{ article.body }}</div>
+                        <div style=" flex: 20%">
+                            {% if article.author == request.user %}
+                            <a href="{% url 'article_update' article.id %}">{% bs_icon 'pen' %}️</a>
+                            <a href="{% url 'article_delete' article.id %}">{% bs_icon 'trash' color='red' %}️</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
 
         </tbody>
     </table>
+
 {% endblock %}

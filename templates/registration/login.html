@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <div class="d-flex justify-content-center">
-    <div style="width: 30%; padding: 20px">
+    <div class="container w-50">
+    <div class="card p-5 mt-5">
         <form action="" method="POST">
             {% csrf_token %}
             {{ form|crispy }}
